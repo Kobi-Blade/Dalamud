@@ -620,7 +620,8 @@ namespace Dalamud.Injector
 
             if (warnManualInjection)
             {
-                var result = Windows.Win32.PInvoke.MessageBox(
+                /*
+				var result = Windows.Win32.PInvoke.MessageBox(
                     HWND.Null,
                     $"Take care: you are manually injecting Dalamud into FFXIV({string.Join(", ", processes.Select(x => $"{x.Id}"))}).\n\nIf you are doing this to use plugins before they are officially whitelisted on patch days, things may go wrong and you may get into trouble.\nWe discourage you from doing this and you won't be warned again in-game.",
                     "Dalamud",
@@ -631,6 +632,7 @@ namespace Dalamud.Injector
                     Log.Information("User cancelled injection");
                     return -2;
                 }
+				*/
             }
 
             if (tryClaimSeDebugPrivilege)
