@@ -54,11 +54,6 @@ namespace Dalamud.Injector
                     // No command defaults to inject
                     args.Add("inject");
                     args.Add("--all");
-
-    #if !DEBUG
-                    args.Add("--warn");
-    #endif
-
                 }
                 else if (int.TryParse(args[1], out var _))
                 {
