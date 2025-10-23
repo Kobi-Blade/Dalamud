@@ -1,0 +1,33 @@
+name: Build Dalamud
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+        with:
+          submodules: recursive
+          persist-credentials: false
+      
+      - name: Prepare Dalamud Build
+        run: dotnet build .\build\build.csproj /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet
+          
+      - name: Build Dalamud
+        run: dotnet run --project .\build\build.csproj --no-build -- Compile
+          
+      - name: Generate Hashes File
+        run: .\CreateHashList.ps1 .\bin\Release
+        
+      - name: Upload Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ github.sha }}
+          path: .\bin\Release
