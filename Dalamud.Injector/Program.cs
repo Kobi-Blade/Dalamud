@@ -185,7 +185,7 @@ namespace Dalamud.Injector
             var logBaseDir = args.FirstOrDefault(x => x.StartsWith("--logpath="))?[10..];
             var logPath = GetLogPath(logBaseDir, "dalamud.injector", logName);
 
-            CullLogFile(logPath, 1 * 1024 * 1024);
+            File.Create(logPath).Dispose();
 
             const long maxLogSize = 100 * 1024 * 1024; // 100MB
             Log.Logger = new LoggerConfiguration()
@@ -196,59 +196,6 @@ namespace Dalamud.Injector
 
             Log.Information(new string('-', 80));
             Log.Information("Dalamud.Injector, (c) 2023 XIVLauncher Contributors");
-        }
-
-        private static void CullLogFile(string logPath, int cullingFileSize)
-        {
-            try
-            {
-                var bufferSize = 4096;
-
-                var logFile = new FileInfo(logPath);
-
-                // Leave it to serilog
-                if (!logFile.Exists)
-                {
-                    return;
-                }
-
-                if (logFile.Length <= cullingFileSize)
-                {
-                    return;
-                }
-
-                var amountToCull = logFile.Length - cullingFileSize;
-
-                if (amountToCull < bufferSize)
-                {
-                    return;
-                }
-
-                using var reader = new BinaryReader(logFile.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-                using var writer = new BinaryWriter(logFile.Open(FileMode.Open, FileAccess.Write, FileShare.ReadWrite));
-
-                reader.BaseStream.Seek(amountToCull, SeekOrigin.Begin);
-
-                var read = -1;
-                var total = 0;
-                var buffer = new byte[bufferSize];
-                while (read != 0)
-                {
-                    read = reader.Read(buffer, 0, buffer.Length);
-                    writer.Write(buffer, 0, read);
-                    total += read;
-                }
-
-                writer.BaseStream.SetLength(total);
-            }
-            catch (Exception)
-            {
-                /*
-                var caption = "XIVLauncher Error";
-                var message = $"Log cull threw an exception: {ex.Message}\n{ex.StackTrace ?? string.Empty}";
-                _ = MessageBoxW(IntPtr.Zero, message, caption, MessageBoxType.IconError | MessageBoxType.Ok);
-                */
-            }
         }
 
         private static OSPlatform DetectPlatformHeuristic()

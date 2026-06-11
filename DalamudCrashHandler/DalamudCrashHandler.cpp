@@ -2005,6 +2005,8 @@ int main() {
     if (!bootLogPath.empty()) {
         const auto crashLogPath = bootLogPath.parent_path() / "dalamud.crashhandler.log";
         try {
+            std::ofstream(crashLogPath, std::ios::trunc).close();
+
             logging::start_file_logging(crashLogPath, !bootConsole);
             logging::I("Logging to file: {}", crashLogPath);
         } catch (const std::exception& e) {

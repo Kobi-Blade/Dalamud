@@ -9,7 +9,6 @@ using Dalamud.Common;
 using Dalamud.Configuration.Internal;
 using Dalamud.Interface.Internal.Windows;
 using Dalamud.Logging.Internal;
-using Dalamud.Logging.Retention;
 using Dalamud.Plugin.Internal;
 using Dalamud.Storage;
 using Dalamud.Support;
@@ -71,18 +70,10 @@ public sealed class EntryPoint
         var logFileName = logName.IsNullOrEmpty() ? "dalamud" : $"dalamud-{logName}";
 
         var logPath = new FileInfo(Path.Combine(baseDirectory, $"{logFileName}.log"));
-        var oldPath = new FileInfo(Path.Combine(baseDirectory, $"{logFileName}.old.log"));
 
         Log.CloseAndFlush();
-
-        RetentionBehaviour behaviour;
-#if DEBUG
-        behaviour = new DebugRetentionBehaviour();
-#else
-        behaviour = new ReleaseRetentionBehaviour();
-#endif
-
-        behaviour.Apply(logPath, oldPath);
+		
+        File.Create(logPath.FullName).Dispose();
 
         var config = new LoggerConfiguration()
                      .WriteTo.Sink(SerilogEventSink.Instance)

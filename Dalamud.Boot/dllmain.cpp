@@ -1,5 +1,6 @@
 #include "pch.h"
 #include <format>
+#include <fstream>
 
 #include <d3d11.h>
 #include <dxgi.h>
@@ -312,6 +313,8 @@ HRESULT WINAPI InitializeImpl(LPVOID lpParam, HANDLE hMainThreadContinue) {
         logging::I("No log file path given; not logging to file.");
     } else {
         try {
+            std::ofstream(resolvedLogPath, std::ios::trunc).close();
+
             logging::start_file_logging(resolvedLogPath, !g_startInfo.BootShowConsole);
             logging::I("Logging to file: {}", resolvedLogPath);
 
