@@ -68,7 +68,6 @@ struct DalamudStartInfo {
     std::set<std::string> BootEnabledGameFixes{};
     std::set<std::string> BootUnhookDlls{};
 
-    bool CrashHandlerShow = false;
     UnhandledExceptionHandlingMode UnhandledException = UnhandledExceptionHandlingMode::Default;
 
     friend void from_json(const nlohmann::json&, DalamudStartInfo&);

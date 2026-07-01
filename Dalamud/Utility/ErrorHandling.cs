@@ -10,12 +10,13 @@ namespace Dalamud.Utility;
 internal static partial class ErrorHandling
 {
     /// <summary>
-    /// Crash the game at this point, and show the crash handler with the supplied context.
+    /// Crash the game at this point without opening a crash handler.
     /// </summary>
-    /// <param name="context">The context to show in the crash handler.</param>
+    /// <param name="context">The context to log before exiting.</param>
     public static void CrashWithContext(string context)
     {
-        BootVehRaiseExternalEvent(context);
+        Log.Fatal("CrashWithContext requested: {Context}", context);
+        Environment.Exit(-1);
     }
 
     /// <summary>
@@ -44,7 +45,4 @@ internal static partial class ErrorHandling
             Environment.Exit(-1);
         }
     }
-
-    [LibraryImport("Dalamud.Boot.dll", EntryPoint = "BootVehRaiseExternalEventW", StringMarshalling = StringMarshalling.Utf16)]
-    private static partial void BootVehRaiseExternalEvent(string info);
 }

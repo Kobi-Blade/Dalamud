@@ -142,7 +142,6 @@ void from_json(const nlohmann::json& json, DalamudStartInfo& config) {
             config.BootUnhookDlls.insert(unicode::convert<std::string>(val.get<std::string>(), &unicode::lower));
     }
 
-    config.CrashHandlerShow = json.value("CrashHandlerShow", config.CrashHandlerShow);
     config.UnhandledException = json.value("UnhandledException", config.UnhandledException);
 }
 

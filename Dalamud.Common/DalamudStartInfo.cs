@@ -158,11 +158,6 @@ public record DalamudStartInfo
     public List<string>? BootUnhookDlls { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to show crash handler console window.
-    /// </summary>
-    public bool CrashHandlerShow { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating how to deal with unhandled exceptions.
     /// </summary>
     public UnhandledExceptionHandlingMode UnhandledException { get; set; }
