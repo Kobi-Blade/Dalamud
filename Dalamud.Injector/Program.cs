@@ -181,16 +181,8 @@ namespace Dalamud.Injector
                 MinimumLevel = verbose ? LogEventLevel.Verbose : LogEventLevel.Information,
             };
 
-            var logName = args.FirstOrDefault(x => x.StartsWith("--logname="))?[10..];
-            var logBaseDir = args.FirstOrDefault(x => x.StartsWith("--logpath="))?[10..];
-            var logPath = GetLogPath(logBaseDir, "dalamud.injector", logName);
-
-            File.Create(logPath).Dispose();
-
-            const long maxLogSize = 100 * 1024 * 1024; // 100MB
             Log.Logger = new LoggerConfiguration()
                          .WriteTo.Console(standardErrorFromLevel: LogEventLevel.Debug)
-                         .WriteTo.File(logPath, fileSizeLimitBytes: maxLogSize)
                          .MinimumLevel.ControlledBy(levelSwitch)
                          .CreateLogger();
 
@@ -406,7 +398,7 @@ namespace Dalamud.Injector
             startInfo.BootDebugDirectX = args.Contains("--debug-directx");
             startInfo.BootShowConsole = args.Contains("--console");
             startInfo.BootEnableEtw = args.Contains("--etw");
-            startInfo.BootLogPath = GetLogPath(startInfo.LogPath, "dalamud.boot", startInfo.LogName);
+            startInfo.BootLogPath = string.Empty;
             startInfo.BootEnabledGameFixes = new()
             {
                 // See: xivfixes.h, xivfixes.cpp
@@ -429,7 +421,6 @@ namespace Dalamud.Injector
             startInfo.NoLoadPlugins = args.Contains("--no-plugin");
             startInfo.NoLoadThirdPartyPlugins = args.Contains("--no-3rd-plugin");
             // startInfo.BootUnhookDlls = new List<string>() { "kernel32.dll", "ntdll.dll", "user32.dll" };
-            startInfo.CrashHandlerShow = args.Contains("--crash-handler-console");
             startInfo.UnhandledException =
                 Enum.TryParse<UnhandledExceptionHandlingMode>(
                     unhandledExceptionStr,
@@ -477,7 +468,7 @@ namespace Dalamud.Injector
             Console.WriteLine("                               [--dalamud-client-language=0-3|j(apanese)|e(nglish)|d|g(erman)|f(rench)]");
 
             Console.WriteLine("Verbose logging:\t[-v]");
-            Console.WriteLine("Show Console:\t[--console] [--crash-handler-console]");
+            Console.WriteLine("Show Console:\t[--console]");
             Console.WriteLine("Enable ETW:\t[--etw]");
             Console.WriteLine("Disable legacy corrupted state exceptions:\t[--no-legacy-corrupted-state-exceptions]");
             Console.WriteLine("Enable VEH:\t[--veh], [--veh-full], [--unhandled-exception=default|stalldebug|none]");

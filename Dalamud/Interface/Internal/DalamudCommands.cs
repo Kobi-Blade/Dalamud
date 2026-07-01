@@ -144,7 +144,7 @@ internal class DalamudCommands : IServiceType
         {
             HelpMessage = Loc.Localize(
                 "DalamudCopyLogHelp",
-                "Copy the dalamud.log file to your clipboard."),
+                "Copy the Dalamud.log file to your clipboard."),
         });
         // Add the new command handler for toggling multi-monitor option
         commandManager.AddHandler("/xltogglemultimonitor", new CommandInfo(this.OnToggleMultiMonitorCommand)
@@ -387,7 +387,7 @@ internal class DalamudCommands : IServiceType
         var logPath = Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "XIVLauncher",
-            "dalamud.log");
+            "Dalamud.log");
         var message = Util.CopyFilesToClipboard([logPath])
                           ? Loc.Localize("DalamudLogCopySuccess", "Log file copied to clipboard.")
                           : Loc.Localize("DalamudLogCopyFailure", "Could not copy log file to clipboard.");

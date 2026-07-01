@@ -1,6 +1,7 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32319.34
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.7.11919.86 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEF7D22B-CB85-400E-BD64-349A30E3C097}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,8 +33,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FFXIVClientStructs", "lib\FFXIVClientStructs\FFXIVClientStructs\FFXIVClientStructs.csproj", "{C9B87BD7-AF49-41C3-91F1-D550ADEB7833}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs.Generators", "lib\FFXIVClientStructs\FFXIVClientStructs.Generators\FFXIVClientStructs.Generators.csproj", "{E0D51896-604F-4B40-8CFE-51941607B3A1}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DalamudCrashHandler", "DalamudCrashHandler\DalamudCrashHandler.vcxproj", "{317A264C-920B-44A1-8A34-F3A6827B0705}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dalamud.Common", "Dalamud.Common\Dalamud.Common.csproj", "{F21B13D2-D7D0-4456-B70F-3F8D695064E2}"
 EndProject
@@ -118,10 +117,6 @@ Global
 		{E0D51896-604F-4B40-8CFE-51941607B3A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0D51896-604F-4B40-8CFE-51941607B3A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0D51896-604F-4B40-8CFE-51941607B3A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{317A264C-920B-44A1-8A34-F3A6827B0705}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{317A264C-920B-44A1-8A34-F3A6827B0705}.Debug|Any CPU.Build.0 = Debug|x64
-		{317A264C-920B-44A1-8A34-F3A6827B0705}.Release|Any CPU.ActiveCfg = Release|x64
-		{317A264C-920B-44A1-8A34-F3A6827B0705}.Release|Any CPU.Build.0 = Release|x64
 		{F21B13D2-D7D0-4456-B70F-3F8D695064E2}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{F21B13D2-D7D0-4456-B70F-3F8D695064E2}.Debug|Any CPU.Build.0 = Debug|x64
 		{F21B13D2-D7D0-4456-B70F-3F8D695064E2}.Release|Any CPU.ActiveCfg = Release|x64

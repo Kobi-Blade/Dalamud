@@ -304,58 +304,8 @@ HRESULT WINAPI InitializeImpl(LPVOID lpParam, HANDLE hMainThreadContinue) {
     logging::set_tag("BOOT");
     logging::update_dll_load_status(true);
 
-    std::wstring resolvedLogPath = unicode::convert<std::wstring>(g_startInfo.BootLogPath);
-
-    auto attemptFallbackLog = false;
-    if (resolvedLogPath.empty()) {
-        attemptFallbackLog = true;
-
-        logging::I("No log file path given; not logging to file.");
-    } else {
-        try {
-            std::ofstream(resolvedLogPath, std::ios::trunc).close();
-
-            logging::start_file_logging(resolvedLogPath, !g_startInfo.BootShowConsole);
-            logging::I("Logging to file: {}", resolvedLogPath);
-
-        } catch (const std::exception& e) {
-            attemptFallbackLog = true;
-            resolvedLogPath.clear();
-
-            logging::E("Couldn't open log file: {}", unicode::convert<std::wstring>(g_startInfo.BootLogPath));
-            logging::E("Error: {} / {}", errno, e.what());
-        }
-    }
-
     if (!jsonParseError.empty())
         logging::E("Couldn't parse input JSON: {}", jsonParseError);
-
-    if (attemptFallbackLog) {
-        std::wstring fallbackLogPath(PATHCCH_MAX_CCH + 1, L'\0');
-        fallbackLogPath.resize(GetTempPathW(static_cast<DWORD>(fallbackLogPath.size()), &fallbackLogPath[0]));
-        if (fallbackLogPath.empty()) {
-            fallbackLogPath.resize(PATHCCH_MAX_CCH + 1);
-            fallbackLogPath.resize(GetCurrentDirectoryW(static_cast<DWORD>(fallbackLogPath.size()), &fallbackLogPath[0]));
-        }
-        if (!fallbackLogPath.empty() && fallbackLogPath.back() != '/' && fallbackLogPath.back() != '\\')
-            fallbackLogPath += L"\\";
-        SYSTEMTIME st;
-        GetLocalTime(&st);
-        fallbackLogPath += std::format(L"Dalamud.Boot.{:04}{:02}{:02}.{:02}{:02}{:02}.{:03}.{}.log", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds, GetCurrentProcessId());
-
-        try {
-            logging::start_file_logging(fallbackLogPath, !g_startInfo.BootShowConsole);
-            resolvedLogPath = fallbackLogPath;
-            logging::I("Logging to fallback log file: {}", fallbackLogPath);
-
-        } catch (const std::exception& e) {
-            if (!g_startInfo.BootShowConsole && !g_startInfo.BootDisableFallbackConsole)
-                ConsoleSetup(L"Dalamud Boot - Fallback Console");
-
-            logging::E("Couldn't open fallback log file: {}", fallbackLogPath);
-            logging::E("Error: {} / {}", errno, e.what());
-        }
-    }
 
     auto minHookLoaded = false;
     if (const auto mhStatus = MH_Initialize(); mhStatus == MH_OK) {
@@ -489,7 +439,7 @@ HRESULT WINAPI InitializeImpl(LPVOID lpParam, HANDLE hMainThreadContinue) {
     if (g_startInfo.UnhandledException == DalamudStartInfo::UnhandledExceptionHandlingMode::None) {
         logging::W("=> Exception handlers are disabled from DalamudStartInfo.");
     } else if (g_startInfo.BootVehEnabled) {
-        if (veh::add_handler(g_startInfo.BootVehFull, g_startInfo.WorkingDirectory, resolvedLogPath, g_startInfo.BootShowConsole))
+        if (veh::add_handler(g_startInfo.BootVehFull, g_startInfo.WorkingDirectory, g_startInfo.BootShowConsole))
             logging::I("=> Done!");
         else
             logging::I("=> Failed!");
@@ -532,13 +482,7 @@ HRESULT WINAPI InitializeImpl(LPVOID lpParam, HANDLE hMainThreadContinue) {
             return hook->call_original(hEventLog, wType, wCategory, dwEventID, lpUserSid, wNumStrings, dwDataSize, lpStrings, lpRawData);
         }
 
-        // In most cases, DalamudCrashHandler will kill us now, so call original here to make sure we still write to the event log.
-        const BOOL original_ret = hook->call_original(hEventLog, wType, wCategory, dwEventID, lpUserSid, wNumStrings, dwDataSize, lpStrings, lpRawData);
-
-        const std::wstring error_details(lpStrings[0]);
-        veh::raise_external_event(error_details);
-
-        return original_ret;
+        return hook->call_original(hEventLog, wType, wCategory, dwEventID, lpUserSid, wNumStrings, dwDataSize, lpStrings, lpRawData);
     });
     logging::I("ReportEventW hook installed.");
 

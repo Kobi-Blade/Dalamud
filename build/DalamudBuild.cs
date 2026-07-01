@@ -35,9 +35,6 @@ public class DalamudBuild : NukeBuild
 
     AbsolutePath DalamudBootProjectDir => RootDirectory / "Dalamud.Boot";
     AbsolutePath DalamudBootProjectFile => DalamudBootProjectDir / "Dalamud.Boot.vcxproj";
-    
-    AbsolutePath DalamudCrashHandlerProjectDir => RootDirectory / "DalamudCrashHandler";
-    AbsolutePath DalamudCrashHandlerProjectFile => DalamudCrashHandlerProjectDir / "DalamudCrashHandler.vcxproj";
 
     AbsolutePath InjectorProjectDir => RootDirectory / "Dalamud.Injector";
     AbsolutePath InjectorProjectFile => InjectorProjectDir / "Dalamud.Injector.csproj";
@@ -150,14 +147,6 @@ public class DalamudBuild : NukeBuild
                 .SetConfiguration(Configuration));
         });
     
-    Target CompileDalamudCrashHandler => _ => _
-        .Executes(() =>
-        {
-            MSBuildTasks.MSBuild(s => s
-                                      .SetTargetPath(DalamudCrashHandlerProjectFile)
-                                      .SetConfiguration(Configuration));
-        });
-
     Target CompileInjector => _ => _
         .DependsOn(Restore)
         .Executes(() =>
@@ -182,7 +171,6 @@ public class DalamudBuild : NukeBuild
     Target Compile => _ => _
     .DependsOn(CompileDalamud)
     .DependsOn(CompileDalamudBoot)
-    .DependsOn(CompileDalamudCrashHandler)
     .DependsOn(CompileInjector)
     ;
 
@@ -225,11 +213,6 @@ public class DalamudBuild : NukeBuild
 
             MSBuildTasks.MSBuild(s => s
                 .SetProjectFile(DalamudBootProjectFile)
-                .SetConfiguration(Configuration)
-                .SetTargets("Clean"));
-            
-            MSBuildTasks.MSBuild(s => s
-                .SetProjectFile(DalamudCrashHandlerProjectFile)
                 .SetConfiguration(Configuration)
                 .SetTargets("Clean"));
 

@@ -32,7 +32,6 @@
         "CompileCImPlot",
         "CompileDalamud",
         "CompileDalamudBoot",
-        "CompileDalamudCrashHandler",
         "CompileImGuiNatives",
         "CompileInjector",
         "Restore",

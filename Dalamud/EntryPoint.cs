@@ -67,9 +67,7 @@ public sealed class EntryPoint
     /// <param name="logName">Name that should be appended to the log file.</param>
     internal static void InitLogging(string baseDirectory, bool logConsole, bool logSynchronously, string? logName)
     {
-        var logFileName = logName.IsNullOrEmpty() ? "dalamud" : $"dalamud-{logName}";
-
-        var logPath = new FileInfo(Path.Combine(baseDirectory, $"{logFileName}.log"));
+        var logPath = new FileInfo(Path.Combine(baseDirectory, "Dalamud.log"));
 
         Log.CloseAndFlush();
 		

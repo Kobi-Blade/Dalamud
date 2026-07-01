@@ -3,7 +3,7 @@ namespace Dalamud.Common;
 /// <summary>Enum describing what to do on unhandled exceptions.</summary>
 public enum UnhandledExceptionHandlingMode
 {
-    /// <summary>Always show Dalamud Crash Handler on crash, except for some exceptions.</summary>
+    /// <summary>Controls how unhandled exceptions are handled during startup and runtime.</summary>
     /// <remarks>See `vectored_exception_handler` in `veh.cpp`.</remarks>
     Default,
 
